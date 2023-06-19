@@ -10,7 +10,7 @@ const url = "https://www.jma.go.jp/bosai/forecast/data/forecast/";
 //               minZoom: 0,
 //               maxZoom: 22,
 //               subdomains: 'abcd',
-//               accessToken: 'CoRpqTGsbsLhDwSWmMvv51IQj9IUZ2BMixM8qxeNDHeH6QKPKUCNVsGYJmGQogo6'
+//               accessToken: 'XXXXX'
 //             }
 //           ).addTo(map);
 L.control.scale({ imperial: false }).addTo(map);
@@ -35,7 +35,6 @@ function getWeather(prefName) {
   fetch(url + prefCode + ".json")
     .then((response) => response.json())
     .then((json) => {
-      
       box.style.visibility = "visible";
 
       const select = document.createElement("select");
@@ -113,8 +112,8 @@ function getWeather(prefName) {
         fetch("./weatherTelops.json")
           .then((response) => response.json())
           .then((telops) => {
-              const iconCode = telops["TELOPS"][weatherCode.toString()][0];
-              iconElem.setAttribute("src", `./img/${iconCode}`);
+            const iconCode = telops["TELOPS"][weatherCode.toString()][0];
+            iconElem.setAttribute("src", `./img/${iconCode}`);
           });
         weatherElem.appendChild(iconElem);
 
@@ -131,11 +130,13 @@ function getWeather(prefName) {
           fetch("./amedasArea.json")
             .then((response) => response.json())
             .then((data) => {
-              const amedasAreaCodes = data[prefCode].find(area => area.class10 === areaCode).amedas;
-              amedasAreaCodes.forEach(code => {
+              const amedasAreaCodes = data[prefCode].find(
+                (area) => area.class10 === areaCode
+              ).amedas;
+              amedasAreaCodes.forEach((code) => {
                 if (code === amedasAreaCode) {
                   const amedasAreaElem = document.createElement("li");
-                  
+
                   // 地域名(アメダス観測所)
                   const amedasAreaNameElem = document.createElement("span");
                   amedasAreaNameElem.classList.add("amedas-area");
@@ -156,17 +157,17 @@ function getWeather(prefName) {
 
                   amedasAreaList.appendChild(amedasAreaElem);
                 }
-              })
+              });
             });
           weatherElem.appendChild(amedasAreaList);
         }
 
         areaElem.appendChild(weatherElem);
-        
+
         // 詳細と降水確率
         const descPptElem = document.createElement("div");
         descPptElem.classList.add("desc-ppt");
-        
+
         // 詳細
         const descElem = document.createElement("div");
         descElem.classList.add("description");
@@ -202,7 +203,7 @@ function getWeather(prefName) {
         areaElem.appendChild(descPptElem);
         box.appendChild(areaElem);
       }
-      
+
       box.appendChild(select);
       // セレクトボックスの変更による表示の切り替え
       select.addEventListener("change", () => {
